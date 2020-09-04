@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+// ================ Reducers ================
+
 const counter = (state = 0, action) => {
   switch (action.type) {
     case "INCREMENT":
@@ -47,6 +49,23 @@ const todos = (state = [], action) => {
   }
 };
 
+const visibilityFilter = (state = "SHOW_ALL", action) => {
+  switch (action.type) {
+    case "SET_VISIBILITY_FILTER":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const todoApp = (state = {}, action) => {
+  return {
+    todos: todos(state.todos, action),
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+  };
+};
+
+// ================ Store ================
 const createStore = (reducer) => {
   let state;
   let listeners = [];
@@ -70,10 +89,12 @@ const createStore = (reducer) => {
   return { getState, dispatch, subscribe };
 };
 
-const store = createStore(todos);
+const store = createStore(todoApp);
 
-const Todos = ({ todos, addTodo, toggleTodo }) => {
+// ================ Components ================
+const Todos = ({ todos, addTodo, toggleTodo, toggleCompleted, filter }) => {
   const [todo, setTodo] = useState("");
+  // const [visibility, setFilter] = useState(filter);
   const [id, setId] = useState(0);
 
   function handleSubmit() {
@@ -89,25 +110,42 @@ const Todos = ({ todos, addTodo, toggleTodo }) => {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          toggleCompleted(
+            filter === "SHOW_ALL" ? "SHOW_COMPLETED" : "SHOW_ALL"
+          );
+          console.log(store.getState());
+        }}
+      >
+        toggle completed
+      </button>
+      <div>Visibility: {filter}</div>
       <input
         type="text"
         value={todo}
         onChange={(e) => setTodo(e.target.value)}
       />
       <button onClick={handleSubmit}> Add Todo </button>
-      <ul>
-        {todos.map((todo, i) => (
-          <li
-            key={todo.id}
-            onClick={() => {
-              toggleTodo(todo.id);
-            }}
-            style={{ textDecoration: todo.completed ? "line-through" : "none" }}
-          >
-            {todo.text}
-          </li>
-        ))}
-      </ul>
+      {todos ? (
+        <ul>
+          {todos.map((todo) => (
+            <li
+              key={todo.id}
+              onClick={() => {
+                toggleTodo(todo.id);
+              }}
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+              }}
+            >
+              {todo.text}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>add a todo</div>
+      )}
     </div>
   );
 };
@@ -124,10 +162,17 @@ const App = () => {
   return (
     <>
       <Todos
-        todos={store.getState()}
+        todos={store.getState().todos}
+        filter={store.getState().visibilityFilter}
         addTodo={(todo) => store.dispatch({ type: "ADD_TODO", payload: todo })}
         toggleTodo={(id) =>
           store.dispatch({ type: "TOGGLE_TODO", payload: id })
+        }
+        toggleCompleted={(filter) =>
+          store.dispatch({
+            type: "SET_VISIBILITY_FILTER",
+            payload: filter,
+          })
         }
       />
       {/* <Counter
@@ -145,3 +190,7 @@ const render = () => {
 
 store.subscribe(render);
 render();
+
+console.log("Current State");
+console.log(store.getState());
+console.log("--------------");
