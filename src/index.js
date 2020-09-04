@@ -1,3 +1,6 @@
+import React from "react";
+import ReactDOM from "react-dom";
+
 const counter = (state = 0, action) => {
   switch (action.type) {
     case "INCREMENT":
@@ -33,13 +36,24 @@ const createStore = (reducer) => {
 };
 const store = createStore(counter);
 
+const Counter = ({ value, onIncrement, onDecrement }) => (
+  <div>
+    <h1>{value}</h1>
+    <button onClick={onIncrement}>+</button>
+    <button onClick={onDecrement}>-</button>
+  </div>
+);
+
 const render = () => {
-  document.body.innerText = store.getState();
+  ReactDOM.render(
+    <Counter
+      value={store.getState()}
+      onIncrement={() => store.dispatch({ type: "INCREMENT" })}
+      onDecrement={() => store.dispatch({ type: "DECREMENT" })}
+    />,
+    document.getElementById("root")
+  );
 };
 
 store.subscribe(render);
 render();
-
-document.addEventListener("click", () => {
-  store.dispatch({ type: "INCREMENT" });
-});
