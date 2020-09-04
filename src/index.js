@@ -13,27 +13,35 @@ const counter = (state = 0, action) => {
   }
 };
 
+// single todo reducer - only handles changes for single todos
+const todo = (state, action) => {
+  switch (action.type) {
+    case "ADD_TODO":
+      return {
+        id: action.payload.id,
+        text: action.payload.text,
+        completed: false,
+      };
+    case "TOGGLE_TODO":
+      if (state.id !== action.payload) {
+        return state;
+      }
+      return {
+        ...state,
+        completed: !state.completed,
+      };
+    default:
+      return state;
+  }
+};
+
+// todos array reducer - handles changes for the list of arrays - uses the single "todo" reducer within it's switch cases
 const todos = (state = [], action) => {
   switch (action.type) {
     case "ADD_TODO":
-      return [
-        ...state,
-        {
-          id: action.payload.id,
-          text: action.payload.text,
-          completed: false,
-        },
-      ];
+      return [...state, todo(undefined, action)];
     case "TOGGLE_TODO":
-      return state.map((todo) => {
-        if (todo.id !== action.payload) {
-          return todo;
-        }
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
-      });
+      return state.map((t) => todo(t, action));
     default:
       return state;
   }
