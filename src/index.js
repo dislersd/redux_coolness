@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+// import { combineReducers } from "redux";
 
 // ================ Reducers ================
 
@@ -58,12 +59,28 @@ const visibilityFilter = (state = "SHOW_ALL", action) => {
   }
 };
 
-const todoApp = (state = {}, action) => {
-  return {
-    todos: todos(state.todos, action),
-    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+// const todoApp = (state = {}, action) => {
+//   return {
+//     todos: todos(state.todos, action),
+//     visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+//   };
+// };
+
+// Refactored top level reducer to use "combineReducers" funtion
+// combineReducers from scratch
+const combineReducers = (reducers) => {
+  return (state = {}, action) => {
+    return Object.keys(reducers).reduce((nextState, key) => {
+      nextState[key] = reducers[key](state[key], action);
+      return nextState;
+    }, {});
   };
 };
+
+const todoApp = combineReducers({
+  todos,
+  visibilityFilter,
+});
 
 // ================ Store ================
 const createStore = (reducer) => {
@@ -94,7 +111,6 @@ const store = createStore(todoApp);
 // ================ Components ================
 const Todos = ({ todos, addTodo, toggleTodo, toggleCompleted, filter }) => {
   const [todo, setTodo] = useState("");
-  // const [visibility, setFilter] = useState(filter);
   const [id, setId] = useState(0);
 
   function handleSubmit() {
