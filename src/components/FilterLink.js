@@ -1,6 +1,10 @@
 import React from "react";
 
-function FilterLink({ filter, children, store }) {
+function FilterLink({ filter, children, store, currentFilter }) {
+  if (filter === currentFilter) {
+    return <span>{children}</span>;
+  }
+
   return (
     <a
       href="#"

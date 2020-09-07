@@ -83,13 +83,17 @@ export const Todos = ({ store }) => {
       </ul>
       <p>
         Show:
-        <FilterLink store={store} filter={"SHOW_ALL"}>
+        <FilterLink store={store} filter={"SHOW_ALL"} currentFilter={filter}>
           All{" "}
         </FilterLink>
-        <FilterLink store={store} filter={"SHOW_ACTIVE"}>
+        <FilterLink store={store} filter={"SHOW_ACTIVE"} currentFilter={filter}>
           Active{" "}
         </FilterLink>
-        <FilterLink store={store} filter={"SHOW_COMPLETED"}>
+        <FilterLink
+          store={store}
+          filter={"SHOW_COMPLETED"}
+          currentFilter={filter}
+        >
           Completed{" "}
         </FilterLink>
       </p>
