@@ -44,10 +44,10 @@ const todos = (state = [], action) => {
   }
 };
 
-const visibilityFilter = (state = "All", action) => {
+const visibilityFilter = (state = "SHOW_ALL", action) => {
   switch (action.type) {
     case "SET_VISIBILITY_FILTER":
-      return state === "All" ? "Completed" : "All";
+      return action.payload;
     default:
       return state;
   }

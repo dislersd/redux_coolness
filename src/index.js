@@ -16,6 +16,7 @@ import App from "./App.js";
 
 const render = () => {
   ReactDOM.render(<App store={store} />, document.getElementById("root"));
+  console.log(store.getState());
 };
 
 store.subscribe(render);

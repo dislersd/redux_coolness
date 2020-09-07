@@ -1,23 +1,23 @@
 import React, { useState } from "react";
+import FilterLink from "./FilterLink";
 
 export const Todos = ({ store }) => {
-  // const [todos, _] = useState(store.getState().todos);
-  // const [filter, setFilter] = useState(store.getState().visibilityFilter);
   const [todo, setTodo] = useState("");
   const [id, setId] = useState(0);
 
   let todos = store.getState().todos;
   let filter = store.getState().visibilityFilter;
 
-  // todos={store.getState().todos}
-
-  // filter={store.getState().visibilityFilter}
-
-  // addTodo={(todo) => {}}
-
-  // toggleTodo={(id) => store.dispatch({ type: "TOGGLE_TODO", payload: id })}
-
-  // toggleCompleted={(filter) => store.dispatch({type: "SET_VISIBILITY_FILTER", payload: filter,})}
+  function getVisibleTodos(todos, filter) {
+    switch (filter) {
+      case "SHOW_ALL":
+        return todos;
+      case "SHOW_COMPLETED":
+        return todos.filter((t) => t.completed);
+      case "SHOW_ACTIVE":
+        return todos.filter((t) => !t.completed);
+    }
+  }
 
   function handleSubmit() {
     console.log("yup");
@@ -29,9 +29,11 @@ export const Todos = ({ store }) => {
     store.dispatch({ type: "ADD_TODO", payload: newTodo });
   }
 
+  const visibleTodos = getVisibleTodos(todos, filter);
+
   return (
     <div>
-      <div
+      {/* <div
         style={{
           color: filter === "Completed" ? "#99CCAB" : "#99CCFF",
           padding: "20px",
@@ -57,7 +59,7 @@ export const Todos = ({ store }) => {
         }}
       >
         toggle completed
-      </button>
+      </button> */}
       <input
         type="text"
         value={todo}
@@ -65,7 +67,7 @@ export const Todos = ({ store }) => {
       />
       <button onClick={handleSubmit}> Add Todo </button>
       <ul>
-        {todos.map((todo) => (
+        {visibleTodos.map((todo) => (
           <li
             key={todo.id}
             onClick={() => {
@@ -79,6 +81,18 @@ export const Todos = ({ store }) => {
           </li>
         ))}
       </ul>
+      <p>
+        Show:
+        <FilterLink store={store} filter={"SHOW_ALL"}>
+          All{" "}
+        </FilterLink>
+        <FilterLink store={store} filter={"SHOW_ACTIVE"}>
+          Active{" "}
+        </FilterLink>
+        <FilterLink store={store} filter={"SHOW_COMPLETED"}>
+          Completed{" "}
+        </FilterLink>
+      </p>
     </div>
   );
 };

@@ -10,7 +10,7 @@
       "name": "Brave",
       "runtimeExecutable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
       "userDataDir": true,
-      "url": "http://localhost:8080",
+      "url": "http://localhost:8081",
       "webRoot": "${workspaceFolder}"
     },
     {
