@@ -1,8 +1,8 @@
 import React from "react";
-import { Todos } from "./components/Todo";
+import { TodoApp } from "./components/TodoApp";
 
 const App = ({ store }) => {
-  return <Todos store={store} />;
+  return <TodoApp store={store} />;
 };
 
 export default App;
