@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 // import { combineReducers } from "redux";
 
@@ -12,6 +12,7 @@ import { createStore } from "./store/store";
 const store = createStore(todoApp);
 
 // ================ Components ================
+
 import App from "./App.js";
 
 const render = () => {

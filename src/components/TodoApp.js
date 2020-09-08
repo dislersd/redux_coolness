@@ -21,14 +21,18 @@ export const TodoApp = ({ store }) => {
     }
   }
 
-  function onAddClick(todo) {
+  function onAddClick(text) {
     console.log("yup");
     let newTodo = {
       id,
-      text: todo,
+      text,
     };
     setId((oldId) => oldId + 1);
     store.dispatch({ type: "ADD_TODO", payload: newTodo });
+  }
+
+  function onTodoClick(id) {
+    store.dispatch({ type: "TOGGLE_TODO", payload: id });
   }
 
   function onFilterClick(filter) {
@@ -43,9 +47,7 @@ export const TodoApp = ({ store }) => {
       <AddTodo onAddClick={onAddClick} />
       <TodoList
         todos={getVisibleTodos(todos, visibilityFilter)}
-        onTodoClick={(id) =>
-          store.dispatch({ type: "TOGGLE_TODO", payload: id })
-        }
+        onTodoClick={onTodoClick}
       />
       <Footer
         visibilityFilter={visibilityFilter}
