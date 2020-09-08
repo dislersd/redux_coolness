@@ -15,12 +15,12 @@ const todo = (state, action) => {
   switch (action.type) {
     case "ADD_TODO":
       return {
-        id: action.payload.id,
-        text: action.payload.text,
+        id: action.todo.id,
+        text: action.todo.text,
         completed: false,
       };
     case "TOGGLE_TODO":
-      if (state.id !== action.payload) {
+      if (state.id !== action.id) {
         return state;
       }
       return {
@@ -47,7 +47,7 @@ const todos = (state = [], action) => {
 const visibilityFilter = (state = "SHOW_ALL", action) => {
   switch (action.type) {
     case "SET_VISIBILITY_FILTER":
-      return action.payload;
+      return action.filter;
     default:
       return state;
   }

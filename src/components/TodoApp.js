@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FilterLink from "./FilterLink";
 import TodoList from "./TodoList";
 import AddTodo from "./AddTodo";
 import Footer from "./Footer";
@@ -28,11 +27,11 @@ export const TodoApp = ({ store }) => {
       text,
     };
     setId((oldId) => oldId + 1);
-    store.dispatch({ type: "ADD_TODO", payload: newTodo });
+    store.dispatch({ type: "ADD_TODO", todo: newTodo });
   }
 
   function onTodoClick(id) {
-    store.dispatch({ type: "TOGGLE_TODO", payload: id });
+    store.dispatch({ type: "TOGGLE_TODO", id });
   }
 
   function onFilterClick(filter) {
@@ -49,10 +48,7 @@ export const TodoApp = ({ store }) => {
         todos={getVisibleTodos(todos, visibilityFilter)}
         onTodoClick={onTodoClick}
       />
-      <Footer
-        visibilityFilter={visibilityFilter}
-        onFilterClick={onFilterClick}
-      />
+      <Footer store={store} />
     </div>
   );
 };
