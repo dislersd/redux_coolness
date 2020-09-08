@@ -15,20 +15,19 @@ class FilterLink extends Component {
   }
 
   render() {
-    const props = this.props;
     const state = this.props.store.getState();
+    const { store, filter, children } = this.props;
+
+    const onFilterClick = () => {
+      store.dispatch({
+        type: "SET_VISIBILITY_FILTER",
+        filter,
+      });
+    };
 
     return (
-      <Link
-        active={props.filter === state.visibilityFilter}
-        onClick={() =>
-          this.props.store.dispatch({
-            type: "SET_VISIBILITY_FILTER",
-            filter: props.filter,
-          })
-        }
-      >
-        {props.children}
+      <Link active={filter === state.visibilityFilter} onClick={onFilterClick}>
+        {children}
       </Link>
     );
   }

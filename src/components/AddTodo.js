@@ -1,7 +1,17 @@
 import React, { useState } from "react";
 
-function AddTodo({ onAddClick }) {
+function AddTodo({ onAddClick, store }) {
   const [todo, setTodo] = useState("");
+  const [id, setId] = useState(0);
+
+  function onAddClick(text) {
+    let newTodo = {
+      id,
+      text,
+    };
+    setId((oldId) => oldId + 1);
+    store.dispatch({ type: "ADD_TODO", todo: newTodo });
+  }
 
   return (
     <div>
