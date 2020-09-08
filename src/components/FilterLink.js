@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import Link from "./Link";
 
 class FilterLink extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    this.unsubscribe = this.props.store.subscribe(() => this.forceUpdate());
+    const { store } = this.props;
+    this.unsubscribe = store.subscribe(() => this.forceUpdate());
   }
 
   componentWillUnmount() {
