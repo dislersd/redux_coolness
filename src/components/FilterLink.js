@@ -1,6 +1,6 @@
 import React from "react";
 
-function FilterLink({ filter, children, store, currentFilter }) {
+function FilterLink({ filter, children, currentFilter, onClick }) {
   if (filter === currentFilter) {
     return <span>{children}</span>;
   }
@@ -10,10 +10,7 @@ function FilterLink({ filter, children, store, currentFilter }) {
       href="#"
       onClick={(e) => {
         e.preventDefault();
-        store.dispatch({
-          type: "SET_VISIBILITY_FILTER",
-          payload: filter,
-        });
+        onClick(filter);
       }}
     >
       {children}
