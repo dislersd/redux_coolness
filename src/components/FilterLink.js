@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 function FilterLink({ filter, children }) {
   return (
     <NavLink
+      exact
       to={filter === "all" ? "" : filter}
       activeStyle={{
         textDecoration: "none",

@@ -4,18 +4,18 @@ import { toggleTodo } from "../actions";
 
 const getVisibleTodos = (todos, visibilityFilter) => {
   switch (visibilityFilter) {
-    case "SHOW_ALL":
+    case "all":
       return todos;
-    case "SHOW_COMPLETED":
+    case "completed":
       return todos.filter((t) => t.completed);
-    case "SHOW_ACTIVE":
+    case "active":
       return todos.filter((t) => !t.completed);
   }
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    todos: getVisibleTodos(state.todos, state.visibilityFilter),
+    todos: getVisibleTodos(state.todos, ownProps.filter),
   };
 };
 
