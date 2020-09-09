@@ -13,7 +13,7 @@ const App = ({
   return (
     <>
       <AddTodo />
-      <VisibleTodoList filter={filter || "all"} />
+      <VisibleTodoList />
       <Footer />
     </>
   );
