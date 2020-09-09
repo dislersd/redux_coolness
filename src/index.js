@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import { combineReducers } from "redux";
+import { Provider } from "react-redux";
 
 // ================ Reducers ================
 
@@ -9,18 +9,20 @@ import { todoApp } from "./reducers/reducers";
 // ================ Store ================
 
 import { createStore } from "./store/store";
-const store = createStore(todoApp);
 
 // ================ Components ================
 
 import App from "./App.js";
+// import Provider from "./components/Provider";
 
-const render = () => {
-  ReactDOM.render(<App store={store} />, document.getElementById("root"));
-  console.log("Current State");
-  console.log(store.getState());
-  console.log("--------------");
-};
+// Legacy Context API - YOU HAVE TO DEFINE THE PROPTYPES OF THE CONTEXT WUT??
+// Provider.childContextTypes = {
+//   store: PropTypes.object,
+// };
 
-store.subscribe(render);
-render();
+ReactDOM.render(
+  <Provider store={createStore(todoApp)}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);

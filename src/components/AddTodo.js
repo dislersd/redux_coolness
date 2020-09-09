@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 
-function AddTodo({ onAddClick, store }) {
+let AddTodo = ({ dispatch }) => {
   const [todo, setTodo] = useState("");
   const [id, setId] = useState(0);
 
@@ -10,7 +11,7 @@ function AddTodo({ onAddClick, store }) {
       text,
     };
     setId((oldId) => oldId + 1);
-    store.dispatch({ type: "ADD_TODO", todo: newTodo });
+    dispatch({ type: "ADD_TODO", todo: newTodo });
   }
 
   return (
@@ -30,6 +31,8 @@ function AddTodo({ onAddClick, store }) {
       </button>
     </div>
   );
-}
+};
+
+AddTodo = connect()(AddTodo);
 
 export default AddTodo;

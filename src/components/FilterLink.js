@@ -1,33 +1,61 @@
-import React, { Component } from "react";
 import Link from "./Link";
+import { connect } from "react-redux";
 
-class FilterLink extends Component {
-  componentDidMount() {
-    const { store } = this.props;
-    this.unsubscribe = store.subscribe(() => this.forceUpdate());
-  }
+const mapStateToProps = (state, ownProps) => {
+  return {
+    active: ownProps.filter === state.visibilityFilter,
+  };
+};
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
-  render() {
-    const state = this.props.store.getState();
-    const { store, filter, children } = this.props;
-
-    const onFilterClick = () => {
-      store.dispatch({
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onClick: () => {
+      dispatch({
         type: "SET_VISIBILITY_FILTER",
-        filter,
+        filter: ownProps.filter,
       });
-    };
+    },
+  };
+};
 
-    return (
-      <Link active={filter === state.visibilityFilter} onClick={onFilterClick}>
-        {children}
-      </Link>
-    );
-  }
-}
+const FilterLink = connect(mapStateToProps, mapDispatchToProps)(Link);
 
 export default FilterLink;
+
+// ** Container component without using connect method to get props from redux store **
+
+// class FilterLink extends Component {
+//   componentDidMount() {
+//     const { store } = this.context;
+//     this.unsubscribe = store.subscribe(() => this.forceUpdate());
+//     console.log("Current State - CDM FILTERLINK");
+//     console.log(store.getState());
+//     console.log("--------------");
+//   }
+
+//   componentWillUnmount() {
+//     this.unsubscribe();
+//     console.log("Current State - UMOUNT FILTERLINK");
+//     console.log(store.getState());
+//     console.log("--------------");
+//   }
+
+//   render() {
+//     const { filter, children } = this.props;
+//     const { store } = this.context;
+//     const state = store.getState();
+
+//     const onFilterClick = () => {
+//       store.dispatch({
+//         type: "SET_VISIBILITY_FILTER",
+//         filter,
+//       });
+//     };
+
+//     return (
+//       <Link active={filter === state.visibilityFilter} onClick={onFilterClick}>
+//         {children}
+//       </Link>
+//     );
+//   }
+// }
