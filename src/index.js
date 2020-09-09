@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+// creates context to pass store to components without needing to drill props
 import { Provider } from "react-redux";
 
 // ================ Reducers ================
@@ -7,8 +8,30 @@ import { Provider } from "react-redux";
 import { todoApp } from "./reducers/reducers";
 
 // ================ Store ================
+import { createStore } from "redux";
+// import { createStore } from "./store/store";
 
-import { createStore } from "./store/store";
+// const persistedState = {
+//   todos: [
+//     {
+//       id: "0",
+//       text: "Hellow World",
+//       completed: false,
+//     },
+//   ],
+//   visibilityFilter: undefined,
+// };
+
+import { loadState, saveState } from "./Utils/localStorage";
+const persistedState = loadState();
+const store = createStore(todoApp, persistedState);
+console.log(store.getState());
+
+store.subscribe(() => {
+  saveState({
+    todos: store.getState().todos,
+  });
+});
 
 // ================ Components ================
 
@@ -21,7 +44,7 @@ import App from "./App.js";
 // };
 
 ReactDOM.render(
-  <Provider store={createStore(todoApp)}>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById("root")
