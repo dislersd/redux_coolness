@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+// ensures our save to local storage functions only runs once per second
+import throttle from "lodash/throttle";
 // creates context to pass store to components without needing to drill props
 import { Provider } from "react-redux";
 
@@ -27,11 +29,14 @@ const persistedState = loadState();
 const store = createStore(todoApp, persistedState);
 console.log(store.getState());
 
-store.subscribe(() => {
-  saveState({
-    todos: store.getState().todos,
-  });
-});
+store.subscribe(
+  throttle(() => {
+    saveState({
+      todos: store.getState().todos,
+    });
+  }),
+  1000
+);
 
 // ================ Components ================
 
