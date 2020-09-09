@@ -20,16 +20,19 @@ const mapStateToProps = (state, { match: { params } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onTodoClick(id) {
-      dispatch(toggleTodo(id));
-    },
-  };
-};
+// You can define mapDispatchToProps like this and pass it into the connect function OR
+// pass in an object like I have done below
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onTodoClick(id) {
+//       dispatch(toggleTodo(id));
+//     },
+//   };
+// };
 
 const VisibleTodoList = withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(TodoList)
+  connect(mapStateToProps, { onTodoClick: toggleTodo })(TodoList)
 );
 
 export default VisibleTodoList;
