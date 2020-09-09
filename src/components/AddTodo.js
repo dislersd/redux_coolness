@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { addTodo } from "../actions";
 
 let AddTodo = ({ dispatch }) => {
   const [todo, setTodo] = useState("");
-  const [id, setId] = useState(0);
-
-  function onAddClick(text) {
-    let newTodo = {
-      id,
-      text,
-    };
-    setId((oldId) => oldId + 1);
-    dispatch({ type: "ADD_TODO", todo: newTodo });
-  }
 
   return (
     <div>
@@ -23,7 +14,7 @@ let AddTodo = ({ dispatch }) => {
       />
       <button
         onClick={() => {
-          onAddClick(todo);
+          dispatch(addTodo(todo));
           setTodo("");
         }}
       >
