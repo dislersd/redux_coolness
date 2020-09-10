@@ -1,46 +1,48 @@
-// single todo reducer - only handles changes for single todos
-const todo = (state, action) => {
-  switch (action.type) {
-    case "ADD_TODO":
-      return {
-        id: action.todo.id,
-        text: action.todo.text,
-        completed: false,
-      };
-    case "TOGGLE_TODO":
-      if (state.id !== action.id) {
-        return state;
-      }
-      return {
-        ...state,
-        completed: !state.completed,
-      };
-    default:
-      return state;
-  }
-};
+import { combineReducers } from "redux";
+import todo from "./todo";
 
 // todos array reducer - handles changes for the list of arrays - uses the single "todo" reducer within it's switch cases
-const todos = (state = [], action) => {
+const byId = (state = {}, action) => {
   switch (action.type) {
     case "ADD_TODO":
-      return [...state, todo(undefined, action)];
     case "TOGGLE_TODO":
-      return state.map((t) => todo(t, action));
+      return {
+        ...state,
+        [action.id]: todo(state[action.id], action),
+      };
     default:
       return state;
   }
 };
 
-export const getVisibleTodos = (state, visibilityFilter) => {
-  switch (visibilityFilter) {
-    case "all":
+const allIds = (state = [], action) => {
+  switch (action.type) {
+    case "ADD_TODO":
+      return [...state, action.id];
+    default:
       return state;
-    case "completed":
-      return state.filter((t) => t.completed);
-    case "active":
-      return state.filter((t) => !t.completed);
   }
 };
 
+const todos = combineReducers({
+  byId,
+  allIds,
+});
+
 export default todos;
+
+const getAllTodos = (state) => state.allIds.map((id) => state.byId[id]);
+
+export const getVisibleTodos = (state, filter) => {
+  const allTodos = getAllTodos(state);
+  switch (filter) {
+    case "all":
+      return allTodos;
+    case "completed":
+      return allTodos.filter((t) => t.completed);
+    case "active":
+      return allTodos.filter((t) => !t.completed);
+    default:
+      throw new Error(`Unknown filter: ${filter}.`);
+  }
+};

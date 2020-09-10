@@ -14,6 +14,9 @@ let AddTodo = ({ dispatch }) => {
       />
       <button
         onClick={() => {
+          if (!todo) {
+            return;
+          }
           dispatch(addTodo(todo));
           setTodo("");
         }}
