@@ -1,31 +1,32 @@
 import React, { Component } from "react";
 import TodoList from "./TodoList";
 import { connect } from "react-redux";
-import { toggleTodo } from "../actions";
+import * as actions from "../actions";
 import { withRouter } from "react-router-dom";
 import { getVisibleTodos } from "../reducers";
 import { fetchTodos } from "../api";
 
 class VisibleTodoList extends Component {
   componentDidMount() {
-    fetchTodos(this.props.filter).then((todos) =>
-      console.log(this.props.filter, todos)
-    );
+    this.fetchData();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.filter !== prevProps.filter) {
-      fetchTodos(this.props.filter).then((todos) =>
-        console.log(this.props.filter, todos)
-      );
+      this.fetchData();
     }
+  }
+
+  fetchData() {
+    const { filter, receiveTodos } = this.props;
+    fetchTodos(filter).then((todos) => receiveTodos(filter, todos));
   }
 
   render() {
     return <TodoList {...this.props} />;
   }
 }
-
+// destructuring nested filter from props.match.params.filter -> { match: { params } }
 const mapStateToProps = (state, { match: { params } }) => {
   const filter = params.filter || "all";
   return {
@@ -35,7 +36,7 @@ const mapStateToProps = (state, { match: { params } }) => {
 };
 
 VisibleTodoList = withRouter(
-  connect(mapStateToProps, { onTodoClick: toggleTodo })(VisibleTodoList)
+  connect(mapStateToProps, actions)(VisibleTodoList)
 );
 
 export default VisibleTodoList;
