@@ -39,14 +39,3 @@ VisibleTodoList = withRouter(
 );
 
 export default VisibleTodoList;
-
-// You can define mapDispatchToProps like this and pass it into the connect function OR
-// pass in an object like I have done below
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onTodoClick(id) {
-//       dispatch(toggleTodo(id));
-//     },
-//   };
-// };
